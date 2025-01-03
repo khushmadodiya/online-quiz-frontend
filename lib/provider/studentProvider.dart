@@ -19,11 +19,11 @@ class StudentProvider extends ChangeNotifier{
     _marksList = await StudentAPIs.getAllMarksWithStudentId(studentId);
     notifyListeners();
   }
-  void getAllquizzesList(String studentId)async{
-    print("this is called");
-    _studentQuizzes = await StudentAPIs.fetchQuizzes(studentId);
-    notifyListeners();
-  }
+  // void getAllquizzesList(String studentId)async{
+  //   print("this is called");
+  //   _studentQuizzes = await StudentAPIs.fetchQuizzes(studentId);
+  //   notifyListeners();
+  // }
 
   void updateAnsOfQuestion(int index , String ans,String rightAns){
     print("this is ans ${ans} and $rightAns and index $index");
@@ -47,6 +47,11 @@ class StudentProvider extends ChangeNotifier{
 
   void clear() {
     _checkAnsOfQuestion = {};
+
+  }
+  void clearQuizAndMarks(){
+    _marksList = [];
+    _studentQuizzes=[];
   }
 
 

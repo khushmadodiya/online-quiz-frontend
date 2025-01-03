@@ -14,15 +14,11 @@ class GetUserDetails{
     final response = await http.get(Uri.parse('$url/$userType/$uid'));
 
     if (response.statusCode == 200) {
-      List jsonResponse = json.decode(response.body);
-      List<model.User>list= jsonResponse.map((student) => model.User.fromJson(student)).toList();
-      for(model.User i in list){
-        print(i.uid);
-        print(i.username);
-        print(i.email);
-        print(i.photoUrl);
-      }
-      return list[0];
+      var jsonResponse = json.decode(response.body);
+      // List<model.User>list= jsonResponse.map((student) => model.User.fromJson(student)).toList();
+      model.User user = model.User.fromJson(jsonResponse);
+
+      return user;
     } else {
       Fluttertoast.showToast(msg: "user not found");
       throw Exception('Failed to load students');

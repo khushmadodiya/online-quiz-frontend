@@ -4,7 +4,7 @@ class Quiz {
   final String subName;
   final String quizTitle;
   final String facultyId;
-  final String? studentId;
+
 
 
   const Quiz(
@@ -12,7 +12,6 @@ class Quiz {
         required this.subName,
         required this.quizTitle,
         required this.quizId,
-        this.studentId
       });
 
   
@@ -20,11 +19,10 @@ class Quiz {
 
   factory Quiz.fromJson(Map<String, dynamic> json) {
     return Quiz(
-      facultyId: json["facultyId"]??"",
+      facultyId: json["faculty"]?['uid']??"",
       subName: json["subName"]??"",
       quizId: json["quizId"]??"",
       quizTitle: json["quizTitle"]??"",
-      studentId: json["studentId"]??"",
     );
   }
   Map<String, dynamic> toJson() => {
@@ -32,7 +30,6 @@ class Quiz {
     "subName": subName,
     "quizId": quizId,
     "quizTitle": quizTitle,
-    "studentId":studentId
   };
 
 }

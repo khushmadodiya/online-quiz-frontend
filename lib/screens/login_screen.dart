@@ -43,17 +43,19 @@ class _LoginScreenState extends State<LoginScreen> {
        flag = false;
      });
      if(res=='success'){
+       var pref = await SharedPreferences.getInstance();
        try{
 
         var pro= Provider.of<UserInformation>(context, listen: false);
-         var pref = await SharedPreferences.getInstance();
+
          pref.setString('key', selectedValue);
          res2 = await pro.getUserData();
         if(res2!='success'){
-          res = 'user not founddd';
+          res = 'user not found';
         }
        }
        catch(e){
+         pref.setString('key', '');
          res='user not found';
          AuthMethod().signOut();
        }

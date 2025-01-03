@@ -9,8 +9,6 @@ import '../globle.dart';
 
 class StudentAPIs{
 
-
-
   void fetchStudents() async {
 
     final response = await http.get(Uri.parse('$url/student'));
@@ -30,7 +28,7 @@ class StudentAPIs{
     }
   }
 
-  Future createUser(model.User user,String type)async{
+  Future  createUser(model.User user,String type)async{
 
      try{
        final response = await http.post(
@@ -67,12 +65,8 @@ class StudentAPIs{
       );
      print("this is khush ${res.statusCode}");
      if(res.statusCode == 200){
-       if(res.body=="success"){
-         return "success";
-       }
-       else{
-         return "Quiz not found";
-       }
+         return res.body;
+
      }
      else{
        return "Failed to Join Quiz";
@@ -91,7 +85,7 @@ class StudentAPIs{
       if (res.statusCode == 200) {
         var jsonResponse = jsonDecode(res.body);
         List<Quiz> list = [];
-        // print(jsonResponse);
+        // print("jsoonres$jsonResponse");
         for (dynamic item in jsonResponse) {
           list.add(Quiz.fromJson(item));
         }
@@ -109,6 +103,7 @@ class StudentAPIs{
   
   static Future updateMarks(Marks marks)async{
    try{
+     print(marks.toJson());
      var res = await http.post(
          Uri.parse('$url/student/quiz/submit'),
          headers: {
@@ -138,12 +133,16 @@ class StudentAPIs{
         },
       );
 
-
+      print("hello from markslllllllll");
       if (res.statusCode == 200) {
         var jsonResponse = jsonDecode(res.body);
+        print(jsonResponse);
 
           for (Map<String, dynamic> item in jsonResponse) {
             marks.add(Marks.fromJson(item));
+          }
+          for(Marks i in marks){
+            print("this is marks list by student ${i.toJson()}");
           }
           return marks; // Successfully fetched and parsed
         }

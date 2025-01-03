@@ -6,6 +6,7 @@ import 'package:online_quiz_frontend/provider/userInfo.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import '../../Widgets/input_text_field.dart';
+import '../../provider/studentProvider.dart';
 import '../../resources/firestore_methso.dart';
 import '../../utils/utils.dart';
 import '../faculty/facultyScreen.dart';
@@ -34,9 +35,16 @@ class _JoinQuizDialogeState extends State<JoinQuizDialoge> {
     setState(() {
       flag = false;
     });
-    if(res=='success'){
-     Navigator.pop(context);
+
+    if(res=="success"){
+      var pro =  Provider.of<StudentProvider>(context,listen: false);
+      var userPro =  Provider.of<UserInformation>(context,listen: false);
+      pro.clearQuizAndMarks();
+      // pro.getAllquizzesList(userPro.userId);
+      pro.getMarksByStudentId(userPro.userId);
     }
+    Navigator.pop(context);
+
     shosnacbar(context, res);
 
   }

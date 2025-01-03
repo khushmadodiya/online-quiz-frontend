@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart'as http;
+import 'package:online_quiz_frontend/model/marksmodel.dart';
 import 'package:online_quiz_frontend/model/questionmodel.dart';
 import 'package:online_quiz_frontend/model/quizmodel.dart';
 import 'package:provider/provider.dart';
@@ -55,7 +56,7 @@ class FacultyAPIs{
 
   static Future<String> deleteQuiz(String Id) async{
     try{
-      var res = await http.get(Uri.parse("$url/quiz/$Id"));
+      var res = await http.delete(Uri.parse("$url/quiz/$Id"));
       if(res.statusCode == 200){
         return "Deleted Successfully";
       }
@@ -91,8 +92,8 @@ class FacultyAPIs{
 
   static Future  updateQuestion(Question question)async{
    try{
-     var res =await http.post(
-       Uri.parse("$url/question/update"),
+     var res =await http.put(
+       Uri.parse("$url/question"),
        headers: {
          "Content-Type":"application/json"
        },
@@ -112,8 +113,8 @@ class FacultyAPIs{
 
   static Future  deleteQuestion(String questionId)async{
    try{
-     var res =await http.get(
-       Uri.parse("$url/question/delete/$questionId"),
+     var res =await http.delete(
+       Uri.parse("$url/question/$questionId"),
      );
      if(res.statusCode==200){
        return "success";
@@ -145,6 +146,23 @@ class FacultyAPIs{
       }
     }catch(e){
       print(e.toString());
+      return [];
+    }
+  }
+  
+  Future getAllStudentWithQuizId(String quizId)async{
+    try{
+     var res =  await http.get(Uri.parse("$url/faculty/marksList/$quizId"));
+     var response = jsonDecode(res.body);
+     if(res.statusCode == 200){
+       List<Marks> list = [];
+       for(dynamic i in response){
+         list.add(Marks.fromJson(i));
+       }
+       return list;
+     }
+
+    }catch(e){
       return [];
     }
   }

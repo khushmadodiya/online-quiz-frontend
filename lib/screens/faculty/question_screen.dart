@@ -58,6 +58,7 @@ class _QuestionScreenState extends State<QuestionScreen> {
 
   void getqustion() async{
     var facultyPro = Provider.of<FacultyProvider>(context,listen: false);
+    facultyPro.clear();
     facultyPro.getAllquestionsListOfPerticularQuizId(widget.quiz.quizId);
   }
 }

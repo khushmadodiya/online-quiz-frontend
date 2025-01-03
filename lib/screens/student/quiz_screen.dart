@@ -19,10 +19,11 @@ import '../../utils/utils.dart';
 import 'package:online_quiz_frontend/model/quizmodel.dart'as model;
 
 class StudentQuiz extends StatefulWidget {
+
   final model.Quiz quiz;
 
 
-  const StudentQuiz({super.key, required this.quiz});
+  const StudentQuiz({super.key, required this.quiz,});
 
   @override
   State<StudentQuiz> createState() => _StudentQuizState();
@@ -92,6 +93,8 @@ class _StudentQuizState extends State<StudentQuiz> {
 
    if(res == 'success'){
      pro.clear();
+     pro.clearQuizAndMarks();
+     pro.getMarksByStudentId(userPro.userId);
      shosnacbar(context, "Submitted");
      Navigator.pop(context);
    }

@@ -1,118 +1,85 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import '../model/marksmodel.dart';
 
-import '../utils/utils.dart';
+class StudentMarksWidget extends StatelessWidget {
+  final List<Marks> marksList;
 
-class StudentMarksWidget extends StatefulWidget {
-  final snap;
-  final index;
-  const StudentMarksWidget({super.key, required this.snap, this.index});
-
-  @override
-  State<StudentMarksWidget> createState() => _StudentMarksWidgetState();
-}
-
-class _StudentMarksWidgetState extends State<StudentMarksWidget> {
-  String name ='';
-  String email ='';
-  bool flag=true;
- @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getname();
-  }
+  const StudentMarksWidget({super.key, required this.marksList});
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    return name==''?Center(child: CircularProgressIndicator(),) :Container(
-        margin: EdgeInsets.symmetric(
-          horizontal: width > webScreenSize ? width * 0.3 : 30,
-          vertical: width > webScreenSize ? 15 : 10,
-        ),
-        // height: MediaQuery.of(context).size.height / 8,
-        // width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Column(
-          children: [
-            widget.index==1?
-            Row(
-              children: [
-                Text(
-                  'NO.',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
 
+    return Center(
+      child: Container(
+
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: DataTable(
+
+            columns: const [
+              DataColumn(
+                label: Text(
+                  'No.',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
-                Expanded(child: SizedBox()),
-                Text(
+              ),
+              DataColumn(
+                label: Text(
                   'Name',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
-                Expanded(child: SizedBox()),
-                Text(
-                  "Email",
+              ),
+              DataColumn(
+                label: Text(
+                  'Email',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
-                Expanded(child: SizedBox()),
-                Text(
+              ),
+              DataColumn(
+                label: Text(
                   'Marks',
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
-
-              ],
-            ):Container(),
-            // Size/dBox(height: 20,),
-            Divider(thickness: 1,color: Colors.white,height: 20,),
-            Row(
-              children: [
-                Text(
-                  '${widget.index}',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-
-                ),
-                 Expanded(child: SizedBox()),
-                Text(
-                  name,
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-                Expanded(child: SizedBox()),
-                Text(
-                  email,
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-                Expanded(child: SizedBox()),
-                Text(
-                  widget.snap['marks'].toString(),
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-
-              ],
-            ),
-            // Divider(thickness: 1,color: Colors.white,height: 20,)
-          ],
-        )
+              ),
+            ],
+            rows: marksList
+                .asMap()
+                .entries
+                .map(
+                  (entry) => DataRow(
+                cells: [
+                  DataCell(
+                    Text(
+                      '${entry.key + 1}', // Row number
+                      style: const TextStyle(fontSize: 15),
+                    ),
+                  ),
+                  DataCell(
+                    Text(
+                      entry.value.student!.username,
+                      style: const TextStyle(fontSize: 15),
+                    ),
+                  ),
+                  DataCell(
+                    Text(
+                      entry.value.student!.email,
+                      style: const TextStyle(fontSize: 15),
+                    ),
+                  ),
+                  DataCell(
+                    Text(
+                      entry.value.marksObtained?.toString() ?? 'N/A',
+                      style: const TextStyle(fontSize: 15),
+                    ),
+                  ),
+                ],
+              ),
+            )
+                .toList(),
+          ),
+        ),
+      ),
     );
-
-  }
-
-  void getname() async{
-   String uid = widget.snap['studentuid'].toString();
-   try{
-     DocumentSnapshot snapshot =await FirebaseFirestore.instance.collection('student').doc(uid).get();
-     setState(() {
-       name = snapshot['username'];
-       email =snapshot['email'];
-     });
-
-     print(name);
-   }
-   catch(e){
-     print('error occured');
-   }
   }
 }

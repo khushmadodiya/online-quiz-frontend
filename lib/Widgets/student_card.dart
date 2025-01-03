@@ -13,12 +13,13 @@ import '../screens/student/view_score.dart';
 import '../utils/utils.dart';
 
 class StudentCard extends StatefulWidget {
-  final Quiz quiz;
+  // final Quiz quiz;
   final Marks marks;
 
   const StudentCard({
     super.key,
-    required this.quiz, required this.marks,
+    // required this.quiz,
+    required this.marks,
   });
 
   @override
@@ -58,34 +59,29 @@ class _StudentCardState extends State<StudentCard> {
               ),
             ),
             child: InkWell(
-              onTap: () {
-               if(true){
-                 Navigator.push(
-                     context,
-                     MaterialPageRoute(
-                         builder: (context) => QuestionScreen( quiz: widget.quiz,)));
-               }
-              },
+              onTap:(){widget.marks.status! ? Navigator.push(context, MaterialPageRoute(builder: (context) => QuestionScreen( quiz: widget.marks.quiz!,))):null;},
+
               child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 ListTile(
                   title: Text(
-                    widget.quiz.quizTitle.toString(),
+                    widget.marks.quiz!.quizTitle.toString(),
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold,color: Colors.white),
                   ),
                   subtitle: Text(
-                    widget.quiz.subName.toString(),
+                    widget.marks.quiz!.subName.toString(),
                     style: TextStyle(fontSize: 15,color: Colors.white),
                   ),
                   trailing:widget.marks.status==false?ElevatedButton(
                     onPressed: (){
                       var pro = Provider.of<FacultyProvider>(context,listen: false);
-                      pro.getAllquestionsListOfPerticularQuizId(widget.quiz.quizId);
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>StudentQuiz(quiz: widget.quiz)));},
+                      pro.getAllquestionsListOfPerticularQuizId(widget.marks.quiz!.quizId);
+                      print(widget.marks.toJson());
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>StudentQuiz(quiz: widget.marks.quiz!)));},
                     child: Text('Join Quiz'),
                   ):ElevatedButton(
                     onPressed: ()async{
-                      showMarksDialog(context,widget.marks.marksObtained.toString(),widget.quiz);},
+                      showMarksDialog(context,widget.marks.marksObtained.toString(),widget.marks.quiz!);},
                     child: Text('View Score'),
 
                   )
@@ -112,7 +108,7 @@ class _StudentCardState extends State<StudentCard> {
   void getdata() async{
     var facultyPro = Provider.of<FacultyProvider>(context,listen: false);
     facultyPro.clear();
-    facultyPro.getAllquestionsListOfPerticularQuizId(widget.quiz.quizId);
-    name = await StudentAPIs().getFacultyNameUsingQuizModel(widget.quiz.facultyId);
+    facultyPro.getAllquestionsListOfPerticularQuizId(widget.marks.quiz!.quizId);
+    name = await StudentAPIs().getFacultyNameUsingQuizModel(widget.marks.faculty!.uid);
   }
 }

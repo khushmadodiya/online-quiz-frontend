@@ -4,10 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:online_quiz_frontend/BackendAPIs/FacultyAPIs.dart';
+import 'package:online_quiz_frontend/Widgets/student_marks_swidget.dart';
 import 'package:online_quiz_frontend/model/quizmodel.dart';
 import 'package:online_quiz_frontend/provider/facultyProvider.dart';
 import 'package:online_quiz_frontend/provider/userInfo.dart';
 import 'package:provider/provider.dart';
+import '../model/marksmodel.dart';
 import '../resources/firestore_methso.dart';
 import '../screens/faculty/marks_screen.dart';
 import '../screens/faculty/question_screen.dart';
@@ -163,8 +165,10 @@ class _FacultyCardState extends State<FacultyCard> {
                                       color: Colors.black
                                     ),
                                       child: Center(child: Text('Student Marks List',style: TextStyle(fontSize: 20,color: Colors.white),))),
-                                  onPressed: (){
-                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>StudnetsMarksScreen(snap: widget.quiz,)));
+                                  onPressed: ()async{
+                                    print(widget.quiz.toJson());
+                                    List<Marks> list  = await FacultyAPIs().getAllStudentWithQuizId(widget.quiz.quizId);
+                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>StudentMarksWidget(marksList: list,)));
                                   },
 
                                 )

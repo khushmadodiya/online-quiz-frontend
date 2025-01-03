@@ -197,19 +197,12 @@ class _StudentScreenState extends State<StudentScreen> {
         body: Consumer<StudentProvider>(
            builder: (context ,studentPro,child)=>
                ListView.builder(
-              itemCount: studentPro.studentQuizzes.length,
+              itemCount: studentPro.marksList.length,
               itemBuilder: (context, index) {
-                Marks marks = Marks(marksId: '', quizId: '', studentId: '',status: false,marksObtained: 0);
-                for(Marks i in studentPro.marksList){
-                  print("this is inside student ${i.toJson()}");
-                  if(i.quizId == studentPro.studentQuizzes[index].quizId){
-                    marks = i;
-                  }
-                }
-                return studentPro.studentQuizzes.isEmpty?Container(
+                return studentPro.marksList.isEmpty?Container(
                 ):StudentCard(
-                  quiz:studentPro.studentQuizzes[index],
-                  marks:marks
+                  // quiz:studentPro.studentQuizzes[index],
+                  marks:studentPro.marksList[index]
                 );
               },
 
@@ -224,7 +217,6 @@ class _StudentScreenState extends State<StudentScreen> {
    WidgetsBinding.instance.addPostFrameCallback((_){
      var pro =  Provider.of<StudentProvider>(context,listen: false);
      var userPro =  Provider.of<UserInformation>(context,listen: false);
-     pro.getAllquizzesList(userPro.userId);
      pro.getMarksByStudentId(userPro.userId);
    });
 
